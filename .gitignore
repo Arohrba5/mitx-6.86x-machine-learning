@@ -169,3 +169,15 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Conda environment files
+conda-meta/
+pkgs/
+*.conda
+*.lock
+*.yaml
+*.yml
+*.json
+
+# Conda environment directories
+envs/
