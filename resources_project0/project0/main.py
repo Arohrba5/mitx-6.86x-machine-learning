@@ -23,8 +23,11 @@ def operations(h, w):
       B - a randomly-generated h x w Numpy array.
       s - the sum of A and B.
     """
-    #Your code here
-    raise NotImplementedError
+    A = np.random.random((h,w))
+    B = np.random.random((h,w))
+    s = A + B
+    return A, B, s
+    
 
 
 def norm(A, B):
