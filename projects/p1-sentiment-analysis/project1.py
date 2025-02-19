@@ -38,9 +38,16 @@ def hinge_loss_single(feature_vector, label, theta, theta_0):
         the hinge loss, as a float, associated with the given data point and
         parameters.
     """
-    # Your code here
-    raise NotImplementedError
+    # Compute score = theta @ X + theta_0
+    score = theta @ feature_vector + theta_0
 
+    # Calculate margin = label * score
+    margin = label * score
+
+    # Compuete hinge loss = max(0, 1-margin)
+    hingeloss = np.maximum(0, 1-margin)
+
+    return hingeloss
 
 
 def hinge_loss_full(feature_matrix, labels, theta, theta_0):
