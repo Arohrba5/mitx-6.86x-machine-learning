@@ -214,7 +214,7 @@ def pegasos_single_step_update(
         completed.
     """
     # Check pegasos update rules
-    if label * (theta @ feature_vector) > 1:
+    if label * (theta @ feature_vector + theta_0) > 1:
         new_theta = (1 - eta * L) * theta
         new_theta_0 = theta_0
     else:
