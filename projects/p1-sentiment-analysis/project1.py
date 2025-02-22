@@ -104,13 +104,12 @@ def perceptron_single_step_update(
         the updated offset parameter `theta_0` as a floating point number
     """
     # Calculate the sign of the v @ theta + theta_0
-    y_hat = np.sign(current_theta @ feature_vector + current_theta_0) * 1
-    if y_hat == label:
+    y_hat = np.sign(current_theta @ feature_vector + current_theta_0)
+    
+    # Check if estimated classification and actual classification match signs. If not, update thetas.
+    if y_hat * label > 0:
         return (current_theta, current_theta_0)
-    else:
-        new_theta = current_theta + label * feature_vector
-        new_theta_0 = current_theta_0 + label
-        return (new_theta, new_theta_0)
+    return current_theta + label * feature_vector, current_theta_0 + label
 
 
 def perceptron(feature_matrix, labels, T):
