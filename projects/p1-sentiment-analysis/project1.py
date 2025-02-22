@@ -213,15 +213,12 @@ def pegasos_single_step_update(
         real valued number with the value of theta_0 after the old updated has
         completed.
     """
-    # Calculate the sign of the v @ theta + theta_0
-    y_hat = np.sign(theta @ feature_vector + theta_0)
-    
-    # Check if estimated classification and actual classification match signs. If not, update thetas.
+    # Check pegasos update rules
     if label * (theta @ feature_vector) > 1:
-        new_theta = (1 - eta * L)*theta
+        new_theta = (1 - eta * L) * theta
         new_theta_0 = theta_0
     else:
-        new_theta = (1 - eta * L)*theta + eta * label * feature_vector
+        new_theta = (1 - eta * L) * theta + eta * label * feature_vector
         new_theta_0 = theta_0 + eta * label
     return (new_theta, new_theta_0) 
 
