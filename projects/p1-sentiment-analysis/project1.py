@@ -67,8 +67,19 @@ def hinge_loss_full(feature_matrix, labels, theta, theta_0):
         parameters.  This number should be the average hinge loss across all of
     """
 
-    # Your code here
-    raise NotImplementedError
+    # Compute score = theta @ X + theta_0
+    scores = feature_matrix @ theta + theta_0
+
+    # Calculate margin = label * score
+    margins = labels * scores
+
+    # Hingeloss of each row
+    hingelosses = np.maximum(0,1-margins)
+    
+    # Compuete hinge loss = max(0, 1-margin)
+    hingeloss = np.mean(hingelosses)
+
+    return hingeloss
 
 
 
