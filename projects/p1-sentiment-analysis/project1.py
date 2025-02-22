@@ -170,8 +170,20 @@ def average_perceptron(feature_matrix, labels, T):
         the average offset parameter `theta_0` as a floating point number
             (averaged also over T iterations through the feature matrix).
     """
-    # Your code here
-    raise NotImplementedError
+    theta = np.zeros(feature_matrix.shape[1])
+    theta_0 = 0.0
+    num_samples = feature_matrix.shape[0]
+    sum_theta = np.zeros(feature_matrix.shape[1])
+    sum_theta_0 = 0.0
+    
+    for t in range(T):
+        for i in get_order(num_samples):
+            theta, theta_0 = perceptron_single_step_update(feature_matrix[i], labels[i], theta, theta_0)
+            sum_theta += theta
+            sum_theta_0 += theta_0
+    average_theta = sum_theta / (T * num_samples)
+    average_theta_0 = sum_theta_0 / (T * num_samples)
+    return average_theta, average_theta_0
 
 
 def pegasos_single_step_update(
