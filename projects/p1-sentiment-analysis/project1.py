@@ -357,13 +357,9 @@ def extract_words(text):
         a list of lowercased words in the string, where punctuation and digits
         count as their own words.
     """
-    # Your code here
-    raise NotImplementedError
-
     for c in punctuation + digits:
         text = text.replace(c, ' ' + c + ' ')
     return text.lower().split()
-
 
 
 def bag_of_words(texts, remove_stopword=False):
@@ -376,20 +372,17 @@ def bag_of_words(texts, remove_stopword=False):
     Returns:
         a dictionary that maps each word appearing in `texts` to a unique
         integer `index`.
-    """
-    # Your code here
-    raise NotImplementedError
-    
+    """    
+    stopword = {"he", "is", "on", "there", "to"}
     indices_by_word = {}  # maps word to unique index
     for text in texts:
         word_list = extract_words(text)
         for word in word_list:
             if word in indices_by_word: continue
-            if word in stopword: continue
+            if remove_stopword and word in stopword: continue
             indices_by_word[word] = len(indices_by_word)
 
     return indices_by_word
-
 
 
 def extract_bow_feature_vectors(reviews, indices_by_word, binarize=True):
@@ -402,7 +395,6 @@ def extract_bow_feature_vectors(reviews, indices_by_word, binarize=True):
         matrix thus has shape (n, m), where n counts reviews and m counts words
         in the dictionary.
     """
-    # Your code here
     feature_matrix = np.zeros([len(reviews), len(indices_by_word)], dtype=np.float64)
     for i, text in enumerate(reviews):
         word_list = extract_words(text)
@@ -410,10 +402,8 @@ def extract_bow_feature_vectors(reviews, indices_by_word, binarize=True):
             if word not in indices_by_word: continue
             feature_matrix[i, indices_by_word[word]] += 1
     if binarize:
-        # Your code here
-        raise NotImplementedError
+        feature_matrix = np.where(feature_matrix != 0, 1, 0)
     return feature_matrix
-
 
 
 def accuracy(preds, targets):
