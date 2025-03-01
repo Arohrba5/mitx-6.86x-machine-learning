@@ -362,7 +362,7 @@ def extract_words(text):
     return text.lower().split()
 
 
-def bag_of_words(texts, remove_stopword=False):
+def bag_of_words(texts, remove_stopword=True):
     """
     NOTE: feel free to change this code as guided by Section 3 (e.g. remove
     stopwords, add bigrams etc.)
@@ -373,7 +373,10 @@ def bag_of_words(texts, remove_stopword=False):
         a dictionary that maps each word appearing in `texts` to a unique
         integer `index`.
     """    
-    stopword = {"he", "is", "on", "there", "to"}
+    stopword_file = "stopwords.txt"
+    with open(stopword_file, "r") as f:
+        stopword = set(f.read().splitlines())
+
     indices_by_word = {}  # maps word to unique index
     for text in texts:
         word_list = extract_words(text)
@@ -385,7 +388,7 @@ def bag_of_words(texts, remove_stopword=False):
     return indices_by_word
 
 
-def extract_bow_feature_vectors(reviews, indices_by_word, binarize=True):
+def extract_bow_feature_vectors(reviews, indices_by_word, binarize=False):
     """
     Args:
         `reviews` - a list of natural language strings
