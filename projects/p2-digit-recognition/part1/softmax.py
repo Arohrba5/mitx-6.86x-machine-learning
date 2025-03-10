@@ -31,8 +31,19 @@ def compute_probabilities(X, theta, temp_parameter):
     Returns:
         H - (k, n) NumPy array, where each entry H[j][i] is the probability that X[i] is labeled as j
     """
-    #YOUR CODE HERE
-    raise NotImplementedError
+    # Compute the scores for each class.
+    scores = theta @ X.T
+    
+    # Calculate c.
+    c = np.max(scores / temp_parameter, axis=0) 
+
+    # Divide by the temperature parameter τ. Subtract c.
+    adjusted_scores = (scores / temp_parameter) - c 
+
+    # Normalize the exponentiated values.
+    probabilities =  np.exp(adjusted_scores) / np.sum(np.exp(adjusted_scores), axis=0)
+
+    return probabilities
 
 def compute_cost_function(X, Y, theta, lambda_factor, temp_parameter):
     """
@@ -50,8 +61,24 @@ def compute_cost_function(X, Y, theta, lambda_factor, temp_parameter):
     Returns
         c - the cost value (scalar)
     """
-    #YOUR CODE HERE
-    raise NotImplementedError
+    # Calculate probabilities from Softmax
+    probabilities = compute_probabilities(X, theta, temp_parameter)
+
+    # Select probabilities of true labels
+    true_probabilities = probabilities[Y, np.arange(X.shape[0])]
+
+    # Compute Cross-entropy loss
+    log_probabilities = np.log(true_probabilities)
+    loss = -np.mean(log_probabilities)
+
+    # Compute L2 Regularization
+    regularization = (lambda_factor/2 * np.sum(np.square(theta)))
+
+    # Compute Total cost
+    cost = loss + regularization
+
+    return cost
+
 
 def run_gradient_descent_iteration(X, Y, theta, alpha, lambda_factor, temp_parameter):
     """
@@ -70,8 +97,21 @@ def run_gradient_descent_iteration(X, Y, theta, alpha, lambda_factor, temp_param
     Returns:
         theta - (k, d) NumPy array that is the final value of parameters theta
     """
-    #YOUR CODE HERE
-    raise NotImplementedError
+    # Calculate probabilities
+    P = compute_probabilities(X, theta, temp_parameter)
+
+    # Build indicator matrix
+    n = X.shape[0]
+    k = theta.shape[0]
+    M = sparse.coo_matrix(([1]*n, (Y, range(n))), shape=(k,n)).toarray()
+
+    # Calculate gradient
+    gradient = -(1 / (temp_parameter * n)) * ((M - P) @ X) + lambda_factor * theta
+
+    # Update theta (theta = theta - alpha * gradient)
+    theta = theta - alpha * gradient
+
+    return theta
 
 def update_y(train_y, test_y):
     """
