@@ -86,34 +86,46 @@ train_x, train_y, test_x, test_y = get_MNIST_data()
 # TODO: first fill out functions in softmax.py, or run_softmax_on_MNIST will not work
 
 
-def run_softmax_on_MNIST(temp_parameter=1):
-    """
-    Trains softmax, classifies test data, computes test error, and plots cost function
+# def run_softmax_on_MNIST(temp_parameter=1):
+#     """
+#     Trains softmax, classifies test data, computes test error, and plots cost function
 
-    Runs softmax_regression on the MNIST training set and computes the test error using
-    the test set. It uses the following values for parameters:
-    alpha = 0.3
-    lambda = 1e-4
-    num_iterations = 150
+#     Runs softmax_regression on the MNIST training set and computes the test error using
+#     the test set. It uses the following values for parameters:
+#     alpha = 0.3
+#     lambda = 1e-4
+#     num_iterations = 150
 
-    Saves the final theta to ./theta.pkl.gz
+#     Saves the final theta to ./theta.pkl.gz
 
-    Returns:
-        Final test error
-    """
-    train_x, train_y, test_x, test_y = get_MNIST_data()
-    theta, cost_function_history = softmax_regression(train_x, train_y, temp_parameter, alpha=0.3, lambda_factor=1.0e-4, k=10, num_iterations=150)
-    plot_cost_function_over_time(cost_function_history)
-    test_error = compute_test_error(test_x, test_y, theta, temp_parameter)
-    # Save the model parameters theta obtained from calling softmax_regression to disk.
-    write_pickle_data(theta, "./theta.pkl.gz")
+#     Returns:
+#         Final test error
+#     """
+#     train_x, train_y, test_x, test_y = get_MNIST_data()
+#     theta, cost_function_history = softmax_regression(train_x, train_y, temp_parameter, alpha=0.3, lambda_factor=1.0e-4, k=10, num_iterations=150)
+#     plot_cost_function_over_time(cost_function_history)
+#     test_error = compute_test_error(test_x, test_y, theta, temp_parameter)
+#     # Save the model parameters theta obtained from calling softmax_regression to disk.
+#     write_pickle_data(theta, "./theta.pkl.gz")
 
-    # TODO: add your code here for the "Using the Current Model" question in tab 6.
-    #      and print the test_error_mod3
-    return test_error
+#     # TODO: add your code here for the "Using the Current Model" question in tab 6.
+#     #      and print the test_error_mod3
+    
+#     # Update labels to mod 3
+#     train_y_mod3, test_y_mod3 = update_y(train_y, test_y)
+
+#     # Compute the test error rate on mod 3 labels
+#     test_error_mod3 = compute_test_error_mod3(test_x, test_y_mod3, theta, temp_parameter)
+
+#     # Print the mod 3 error
+#     print(f"Error rate for labels mod 3 (temp_parameter={temp_parameter}): {test_error_mod3}")
+
+#     #########
+    
+#     return test_error
 
 
-print('softmax test_error=', run_softmax_on_MNIST(temp_parameter=1))
+# print('softmax test_error=', run_softmax_on_MNIST(temp_parameter=1))
 
 # TODO: Find the error rate for temp_parameter = [.5, 1.0, 2.0]
 # print('softmax test_error with temp_parameter = 0.5:', run_softmax_on_MNIST(temp_parameter=0.5))
@@ -134,20 +146,45 @@ print('softmax test_error=', run_softmax_on_MNIST(temp_parameter=1))
 
 #     See run_softmax_on_MNIST for more info.
 #     """
-#     # YOUR CODE HERE
-#     raise NotImplementedError
+#      # Load data
+#     train_x, train_y, test_x, test_y = get_MNIST_data()
+
+#     # Convert data to mod 3 first
+#     train_y_mod3, test_y_mod3 = update_y(train_y, test_y)
+
+#     # Train the model on the original digit labels (0-9)
+#     theta, cost_function_history = softmax_regression(
+#         train_x,
+#         train_y_mod3,
+#         temp_parameter,
+#         alpha=0.3,
+#         lambda_factor=1.0e-4,
+#         k=3,
+#         num_iterations=150
+#     )
+
+#     # Compute the test error rate on mod 3 labels
+#     test_error_mod3 = compute_test_error_mod3(test_x, test_y_mod3, theta, temp_parameter)
+
+#     # Print or return the test error for mod 3 labels
+#     print(f"Error rate for labels mod 3 (temp_parameter={temp_parameter}): {test_error_mod3}")
+
+#     return test_error_mod3
 
 
 # # TODO: Run run_softmax_on_MNIST_mod3(), report the error rate
 
+# print('softmax test_error for mod 3 labels with temp_parameter=1:', run_softmax_on_MNIST_mod3(temp_parameter=1))
 
-# #######################################################################
-# # 7. Classification Using Manually Crafted Features
-# #######################################################################
 
-# ## Dimensionality reduction via PCA ##
 
-# # TODO: First fill out the PCA functions in features.py as the below code depends on them.
+#######################################################################
+# 7. Classification Using Manually Crafted Features
+#######################################################################
+
+## Dimensionality reduction via PCA ##
+
+# TODO: First fill out the PCA functions in features.py as the below code depends on them.
 
 
 # n_components = 18
@@ -164,6 +201,18 @@ print('softmax test_error=', run_softmax_on_MNIST(temp_parameter=1))
 
 # # TODO: Train your softmax regression model using (train_pca, train_y)
 # #       and evaluate its accuracy on (test_pca, test_y).
+# theta, cost_function_history = softmax_regression(
+#     train_pca,
+#     train_y,
+#     temp_parameter=1,      # or you can try tuning this later
+#     alpha=0.3,
+#     lambda_factor=1.0e-4,
+#     k=10,
+#     num_iterations=150
+# )
+
+# test_error_pca = compute_test_error(test_pca, test_y, theta, temp_parameter=1)
+# print(f"Error rate for 18-dimensional PCA features: {test_error_pca}")
 
 
 # # TODO: Use the plot_PC function in features.py to produce scatterplot
@@ -185,9 +234,14 @@ print('softmax test_error=', run_softmax_on_MNIST(temp_parameter=1))
 # plot_images(train_x[1, ])
 
 
-# ## Cubic Kernel ##
-# # TODO: Find the 10-dimensional PCA representation of the training and test set
+# Cubic Kernel ##
+# TODO: Find the 10-dimensional PCA representation of the training and test set
+n_components = 10
+train_x_centered, feature_means = center_data(train_x)
+pcs = principal_components(train_x_centered)
 
+train_pca10 = project_onto_PC(train_x, pcs, n_components, feature_means)
+test_pca10 = project_onto_PC(test_x, pcs, n_components, feature_means)
 
 # # TODO: First fill out cubicFeatures() function in features.py as the below code requires it.
 
@@ -199,3 +253,63 @@ print('softmax test_error=', run_softmax_on_MNIST(temp_parameter=1))
 
 # # TODO: Train your softmax regression model using (train_cube, train_y)
 # #       and evaluate its accuracy on (test_cube, test_y).
+# theta, cost_function_history = softmax_regression(
+#     train_cube,
+#     train_y,
+#     temp_parameter=1,
+#     alpha=0.3,
+#     lambda_factor=1.0e-4,
+#     k=10,
+#     num_iterations=150
+# )
+
+# test_error_cubic = compute_test_error(test_cube, test_y, theta, temp_parameter=1)
+
+# print(f"Error rate for 10-dimensional cubic PCA features: {test_error_cubic}")
+
+
+#######################################################################
+# 10. Polynomial SVM Using scikit-learn
+#######################################################################
+
+from sklearn import svm
+from sklearn.metrics import accuracy_score
+
+# PCA representation already computed earlier (n_components = 10)
+# train_pca10 and test_pca10 already exist
+
+# 1. Initialize and train Cubic Polynomial SVM
+poly_svm = svm.SVC(
+    random_state=0,
+    kernel='poly',
+    degree=3
+)
+
+# Fit on the 10-dimensional PCA training data
+poly_svm.fit(train_pca10, train_y)
+
+# Predict on test data
+pred_test_y = poly_svm.predict(test_pca10)
+
+# Compute test error
+test_error_svm_poly = 1 - accuracy_score(test_y, pred_test_y)
+
+print(f"Error rate for 10-dimensional PCA features using cubic polynomial SVM: {test_error_svm_poly}")
+
+
+# 2. Initialize and train RBF SVM
+poly_svm = svm.SVC(
+    random_state=0,
+    kernel='rbf',
+)
+
+# Fit on the 10-dimensional PCA training data
+poly_svm.fit(train_pca10, train_y)
+
+# Predict on test data
+pred_test_y = poly_svm.predict(test_pca10)
+
+# Compute test error
+test_error_svm_poly = 1 - accuracy_score(test_y, pred_test_y)
+
+print(f"Error rate for 10-dimensional PCA features using RBF SVM: {test_error_svm_poly}")
