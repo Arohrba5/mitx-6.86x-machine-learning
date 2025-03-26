@@ -20,11 +20,21 @@ class MLP(nn.Module):
         self.flatten = Flatten()
         # TODO initialize model layers here
 
+        # Hidden layer with 64 units
+        self.hidden = nn.Linear(input_dimension, 64)
+
+        # Output layers for the two digits
+        self.out_first = nn.Linear(64, 10)
+        self.out_second = nn.Linear(64, 10)
+
     def forward(self, x):
         xf = self.flatten(x)
 
         # TODO use model layers to predict the two digits
-
+        hidden = torch.relu(self.hidden(xf))
+        out_first_digit = self.out_first(hidden)
+        out_second_digit = self.out_second(hidden)
+        
         return out_first_digit, out_second_digit
 
 def main():
