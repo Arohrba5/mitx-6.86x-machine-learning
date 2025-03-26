@@ -43,9 +43,20 @@ def main():
     #################################
     ## Model specification TODO
     model = nn.Sequential(
-              nn.Conv2d(1, 32, (3, 3)),
-              nn.ReLU(),
-              nn.MaxPool2d((2, 2)),
+            nn.Conv2d(1, 32, (3, 3)),     # Convolutional layer with 32 filters of size 3x3 
+            nn.ReLU(),                    # ReLU
+            nn.MaxPool2d((2, 2)),         # Max pooling layer with size 2x2
+            
+            nn.Conv2d(32, 64, (3, 3)),    # Convolutional layer with 64 filters of size 3x3 
+            nn.ReLU(),                    # ReLU
+            nn.MaxPool2d((2, 2)),         # Max pooling layer with size 2x2
+            
+            Flatten(),                    # Flatten
+
+            nn.Linear(64 * 5 * 5, 128),   # Fully connected layer with 128 neurons
+            nn.Dropout(0.5),              # Dropout layer with drop probability 0.5
+
+            nn.Linear(128, 10)            # Output layer of 10 neurons
             )
     ##################################
 
