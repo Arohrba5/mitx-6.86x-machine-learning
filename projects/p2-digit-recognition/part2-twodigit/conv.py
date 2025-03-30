@@ -20,10 +20,33 @@ class CNN(nn.Module):
     def __init__(self, input_dimension):
         super(CNN, self).__init__()
         # TODO initialize model layers here
+        self.feature_extractor = nn.Sequential(
+            nn.Conv2d(1, 32, (3, 3)),    # Convolutional layer with 32 filters of size 3x3 
+            nn.ReLU(),                   # ReLU
+            nn.MaxPool2d((2, 2)),        # Max pooling layer with size 2x2
+
+            nn.Conv2d(32, 64, (3, 3)),   # Convolutional layer with 64 filters of size 3x3 
+            nn.ReLU(),                   # ReLU
+            nn.MaxPool2d((2, 2)),        # Max pooling layer with size 2x2
+
+            Flatten(),                   # Flatten
+        )
+
+        self.classifier = nn.Sequential(
+            nn.Linear(64 * 9 * 5, 128),  # Fully connected layer with 128 neurons
+            nn.Dropout(0.5),             # Dropout layer with drop probability 0.5
+        )
+
+        self.digit1 = nn.Linear(128, 10) # Output layer for first digit
+        self.digit2 = nn.Linear(128, 10) # Output layer for second digit
 
     def forward(self, x):
 
         # TODO use model layers to predict the two digits
+        x = self.feature_extractor(x)     # Extract features
+        x = self.classifier(x)            # Shared classifier head
+        out_first_digit = self.digit1(x)  # First digit prediction
+        out_second_digit = self.digit2(x) # Second digit prediction
 
         return out_first_digit, out_second_digit
 
