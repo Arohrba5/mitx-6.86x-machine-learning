@@ -216,3 +216,7 @@ if __name__ == '__main__':
     axis.set_title(('Tablular: nRuns=%d, Epilon=%.2f, Epi=%d, alpha=%.4f' %
                     (NUM_RUNS, TRAINING_EP, NUM_EPIS_TRAIN, ALPHA)))
     plt.show()
+
+    for r, rewards in enumerate(epoch_rewards_test):
+        print(f"Run {r}: final‑5‑epoch mean = {np.mean(rewards[-5:]):.4f}")
+        print("Across runs:", np.mean([np.mean(r[-5:]) for r in epoch_rewards_test]))
