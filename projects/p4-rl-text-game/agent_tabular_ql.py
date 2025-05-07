@@ -60,9 +60,26 @@ def tabular_q_learning(q_func, current_state_1, current_state_2, action_index,
     Returns:
         None
     """
-    # TODO Your code here
-    q_func[current_state_1, current_state_2, action_index,
-           object_index] = 0  # TODO Your update here
+    # Current estimate
+    old_q = q_func[current_state_1, current_state_2, action_index,
+           object_index] = 0
+    
+    # Bootstrap value from next state
+    if terminal:
+        next_max = 0.0
+    else:
+        # max over every verb object pair in the next state
+        next_max = np.max(q_func[next_state_1,
+                                 next_state_2])
+    
+    # One step TD target
+    td_target = reward + GAMMA * next_max
+
+    # Q-value update
+    q_func[current_state_1,
+           current_state_2,
+           action_index,
+           object_index] = (1 - ALPHA) * old_q + ALPHA * td_target
 
     return None  # This function shouldn't return anything
 
